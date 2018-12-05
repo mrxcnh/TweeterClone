@@ -1,11 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home page</title>
-</head>
-<body>
+
 {% include 'header.html' %}
-</ul>
-</body>
-</html>
+{% load static %}
+<script src="{% static 'tweeter/js/js4index.js' %}"></script>
+{% if user.is_authenticated %}
+    <form action="{% url 'tweeter:add_tweet' %}" method="post">
+        {% csrf_token %}
+            <input type="text" name="tweet_text">
+            <button onclick="checkEmptyInput(text)" type="submit"> Tweet </button>
+    </form>
+    <div id="tweet_list">
+        <h3> Tweet list you may care </h3>
+        {% if tweet_list %}
+            <ul>
+            {% for tweet in tweet_list %}
+                <li>{{ user.username }} on {{ tweet.time_tweeted }}: {{ tweet.tweet_text }}</li>
+                <br>
+                <button onclick="">Like</button>
+                <button onclick="">Unlike</button>
+                <br>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Don't have a tweet yet!</p>
+        {% endif %}
+    </div>
+{% endif %}
