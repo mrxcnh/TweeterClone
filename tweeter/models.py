@@ -7,6 +7,7 @@ from django.db import models
 class Tweet(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tweet_text = models.CharField(max_length=1000)
+    time_tweeted = models.DateTimeField('time tweeted')
 
 
 class Like(models.Model):
