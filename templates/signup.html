@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}Sign Up{% endblock %}
-
+{% block style %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_core.bundle.css" class="coreCSSBundles">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_1.bundle.css">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_2.bundle.css">
+{% endblock %}
 {% block content %}
+    <div class="page-canvas">
     <a href="{% url 'login' %}">Back to login</a>
     <h2>Sign up</h2>
     <form method="post">
@@ -19,6 +25,7 @@
             {% endfor %}
         </p>
         {% endfor %}
-    <button type="submit">Sign up</button>
-  </form>
+    <button type="submit" class="submit EdgeButton EdgeButton--primary EdgeButtom--medium">Sign up</button>
+    </form>
+    </div>
 {% endblock %}

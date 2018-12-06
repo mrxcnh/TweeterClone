@@ -1,13 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %} Title {% endblock %}</title>
-</head>
-<body>
-<header>
-    {% block content %}
+<html lang="en" data-scribe-reduced-action-queue="true">
+    <head>
+    <title> {% block title %} Title {% endblock %}</title>
+    <meta charset="utf-8">
+    {% block style %}
     {% endblock %}
-</header>
-</body>
+
+    </head>
+    <body>
+        <header>
+        <nav>
+            {% block nav %}
+            {% endblock %}
+        </nav>
+        </header>
+    <div>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
 </html>

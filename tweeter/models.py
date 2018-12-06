@@ -7,25 +7,23 @@ from django.db import models
 class Tweet(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tweet_text = models.CharField(max_length=1000)
-    time_tweeted = models.DateTimeField('time tweeted')
+    time_tweeted = models.DateTimeField(auto_now_add=True)
 
 
 class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-    time_liked = models.DateTimeField('time liked')
-
-
-class Unlike(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-    time_unliked = models.DateTimeField('time unliked')
+    time_liked = models.DateTimeField(auto_now_add=True)
 
 
 class Reply(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-    time_reply = models.DateTimeField('time reply')
+    time_reply = models.DateTimeField(auto_now_add=True)
     reply_text = models.CharField(max_length=1000)
 
 
+class Follow(models.Model):
+    user_follow = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='follower')
+    user_followed = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='followed')
+    time_start_follow = models.DateTimeField(auto_now_add=True)

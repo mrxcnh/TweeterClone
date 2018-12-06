@@ -4,7 +4,9 @@
     {% if user.is_authenticated %}
         <p>Hi {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
     {% else %}
-        <p>You are not logged in
-            <a href="{% url 'login' %}">Login</a> </p>
+        <h3>You are not logged in </h3>
+        <div class="signin-wrapper">
+        <button onclick="location.href='{% url "login" %}'" class="submit EdgeButton EdgeButton--primary EdgeButtom--medium">Login</button>
+        </div>
     {% endif %}
 {% endblock %}

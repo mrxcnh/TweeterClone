@@ -1,19 +1,32 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from django.views import generic
+from django.template import loader
 from django.utils import timezone
 
 # Create your views here.
-from tweeter.models import Tweet
+from tweeter.models import Tweet, Like, Reply
 
 
-class IndexView(generic.ListView):
-    template_name = 'tweeter/index.html'
-    context_object_name = 'tweet_list'
+class TweetInfo:
 
-    def get_queryset(self):
-        return Tweet.objects.all()
+    def __init__(self, tweet, tweet_like, reply):
+        self.tweet = tweet
+        self.number_tweet_likes = tweet_like
+        self.reply = reply
+
+
+def index(request):
+    tweet_list = (Tweet.objects.all()).order_by('-time_tweeted')
+    tweet_infos = []
+    for tweet in tweet_list:
+        reply = tweet.reply_set.all()
+        tweet_info = TweetInfo(tweet, tweet.like_set.all().count(), reply)
+        tweet_infos.append(tweet_info)
+    context = {
+        'tweet_info_list': tweet_infos,
+    }
+    template = loader.get_template('tweeter/index.html')
+    return HttpResponse(template.render(context, request))
 
 
 def add_tweet(request):
@@ -23,3 +36,34 @@ def add_tweet(request):
     new_tweet = Tweet.objects.create(user_id=user_id, tweet_text=request.POST['tweet_text'], time_tweeted=current_time)
     new_tweet.save()
     return HttpResponseRedirect(reverse('tweeter:index'))
+
+
+def like_tweet(request, tweet_id):
+    new_like, created = Like.objects.get_or_create(user=request.user, tweet_id=tweet_id)
+    if not created:
+        new_like.delete()
+        return HttpResponseRedirect(reverse('tweeter:index'))
+    else:
+        new_like.save()
+        return HttpResponseRedirect(reverse('tweeter:index'))
+
+
+def reply_tweet(request, tweet_id):
+    current_user = request.user
+    user_id = current_user.id
+    new_reply = Reply.objects.create(user_id=user_id, tweet_id=tweet_id, reply_text=request.POST['reply_text'])
+    new_reply.save()
+    return HttpResponseRedirect(reverse('tweeter:index'))
+
+
+def people(request):
+    tweet_list = (Tweet.objects.all()).order_by('-time_tweeted')
+    tweet_infos = []
+    for tweet in tweet_list:
+        tweet_info = TweetInfo(tweet, tweet.like_set.all().count())
+        tweet_infos.append(tweet_info)
+    context = {
+        'tweet_info_list': tweet_infos,
+    }
+    template = loader.get_template('tweeter/people.html')
+    return HttpResponse(template.render(context, request))

@@ -1,0 +1,80 @@
+
+{% include 'header.html' %}
+{% block style %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        .split {
+            height: 100%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        /* Control the left side */
+        .left {
+            left: 0;
+            width: 70%;
+
+        }
+
+        /* Control the right side */
+        .right {
+            right: 0;
+            width: 30%;
+
+        }
+
+        #nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: gray;
+        }
+        #nav li {
+            float: left;
+        }
+
+        #nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+             text-decoration: none;
+        }
+
+        #nav li a:hover:not(.active) {
+            background-color: #CCFF;
+        }
+
+        #nav .active {
+            background-color: #44FF;
+        }
+    </style>
+{% endblock %}
+{% load static %}
+<script src="{% static 'tweeter/js/js4index.js' %}"></script>
+{% if user.is_authenticated %}
+{% block nav %}
+    <div id="nav">
+        <ul>
+            <li><a href="{% url 'tweeter:index' %}" >Home</a></li>
+            <li><a href="#" class="active"> People </a></li>
+            <li>
+                <form action="{% url 'tweeter:add_tweet' %}" method="post" name="frm" style="float: right;">
+                {% csrf_token %}
+                    <input type="text" name="tweet_text" style="border-color: black;">
+                    <button type="submit" class="js-global-new-tweet js-tooltip EdgeButton EdgeButton--primary js-dynamic-tooltip"> Tweet </button>
+                </form>
+            </li>
+    </ul>
+    </div>
+{% endblock %}
+
+        <div id="people_list">
+            <h3> People you may want to follow </h3>
+
+        </div>
+{% endif %}
