@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.template import loader
@@ -57,13 +58,9 @@ def reply_tweet(request, tweet_id):
 
 
 def people(request):
-    tweet_list = (Tweet.objects.all()).order_by('-time_tweeted')
-    tweet_infos = []
-    for tweet in tweet_list:
-        tweet_info = TweetInfo(tweet, tweet.like_set.all().count())
-        tweet_infos.append(tweet_info)
+    user_list = User.objects.all()
     context = {
-        'tweet_info_list': tweet_infos,
+        'user_list': user_list,
     }
     template = loader.get_template('tweeter/people.html')
     return HttpResponse(template.render(context, request))

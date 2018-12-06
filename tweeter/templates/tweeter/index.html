@@ -2,77 +2,26 @@
 {% include 'header.html' %}
 {% block style %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <style>
-        .split {
-            height: 100%;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
-
-        /* Control the left side */
-        .left {
-            left: 0;
-            width: 70%;
-
-        }
-
-        /* Control the right side */
-        .right {
-            right: 0;
-            width: 30%;
-
-        }
-
-        #nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: gray;
-        }
-        #nav li {
-            float: left;
-        }
-
-        #nav li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-             text-decoration: none;
-        }
-
-        #nav li a:hover:not(.active) {
-            background-color: #CCFF;
-        }
-
-        #nav .active {
-            background-color: #44FF;
-        }
-    </style>
 {% endblock %}
 {% load static %}
-<script src="{% static 'tweeter/js/js4index.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'tweeter/style.css' %}">
 {% if user.is_authenticated %}
 {% block nav %}
     <div id="nav">
         <ul>
             <li><a href="{% url 'tweeter:index' %}" class="active">Home</a></li>
             <li><a href="{% url 'tweeter:people' %}"> People </a></li>
-            <li>
-                <form action="{% url 'tweeter:add_tweet' %}" method="post" name="frm" style="float: right;">
-                {% csrf_token %}
-                    <input type="text" name="tweet_text" style="border-color: black;">
-                    <button type="submit" class="btn btn-primary"> Tweet </button>
-                </form>
-            </li>
     </ul>
     </div>
 {% endblock %}
-
+    <div id="tweet">
+        <h3>What's in your mind?</h3>
+        <form action="{% url 'tweeter:add_tweet' %}" method="post" name="frm">
+            {% csrf_token %}
+            <input type="text" name="tweet_text" style="border-color: black;">
+            <button type="submit" class="btn btn-primary"> Tweet </button>
+        </form>
+    </div>
         <div id="tweet_list">
             <h3> Tweet list you may care </h3>
             {% if tweet_info_list %}
