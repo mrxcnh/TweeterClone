@@ -51,3 +51,9 @@
         .username{
             font-size: 20px;
         }
+        .tweet_text_field{
+            border-color: black;
+        }
+        .action_with_tweet_li {
+            display: inline-block;
+        }
