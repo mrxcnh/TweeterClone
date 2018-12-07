@@ -4,21 +4,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 {% endblock %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'tweeter/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'tweeter/index_style.css' %}">
 {% if user.is_authenticated %}
 {% block nav %}
     <div id="nav">
         <ul>
             <li><a href="{% url 'tweeter:index' %}" class="active">Home</a></li>
             <li><a href="{% url 'tweeter:people' %}"> People </a></li>
-    </ul>
+        </ul>
     </div>
 {% endblock %}
     <div id="tweet">
         <h3>What's in your mind?</h3>
         <form action="{% url 'tweeter:add_tweet' %}" method="post" name="frm">
             {% csrf_token %}
-            <input type="text" name="tweet_text" style="border-color: black;">
+            <input type="text" name="tweet_text" class="tweet_text_field">
             <button type="submit" class="btn btn-primary"> Tweet </button>
         </form>
     </div>
@@ -27,7 +27,7 @@
             {% if tweet_info_list %}
                 <ul>
                 {% for tweet_info in tweet_info_list %}
-                    <li><span style="font-size: 20px;"><strong>{{ tweet_info.tweet.user.username }}</strong></span> tweeted on {{ tweet_info.tweet.time_tweeted}}: {{ tweet_info.tweet.tweet_text }}</li>
+                    <li><span class="username"><strong>{{ tweet_info.tweet.user.username }}</strong></span> tweeted on {{ tweet_info.tweet.time_tweeted}}: {{ tweet_info.tweet.tweet_text }}</li>
                     <br>
                     <div id="reply_div">
                         {%  for reply in tweet_info.reply %}
@@ -35,15 +35,19 @@
                         {% endfor %}
                     </div>
                     <div id="action_with_tweet">
-                        <li style="display: inline-block;">{{ tweet_info.number_tweet_likes }}</li>
-                        <li style="display: inline-block; margin: 10px;"><button onclick="location.href='{% url "tweeter:like_tweet" tweet_info.tweet.id %}'" class="btn btn-primary">Like</button></li>
-                    <li style="display: inline-block; margin: 20px;">
-                        <form action="{% url 'tweeter:reply_tweet' tweet_info.tweet.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="text" name="reply_text"/>
-                            <button type="submit" class="btn btn-info"> Reply </button>
-                        </form>
-                    </li>
+                        <li style="display: inline-block"><a href="#">{{ tweet_info.number_tweet_likes }}</a></li>
+                        {% if tweet_info.is_liked %}
+                            <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet" tweet_info.tweet.id %}'" class="btn btn-primary">Unlike</button></li>
+                        {% else %}
+                            <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet" tweet_info.tweet.id %}'" class="btn btn-primary">Like</button></li>
+                        {% endif %}
+                        <li style="display: inline-block; margin-left: 10px">
+                            <form action="{% url 'tweeter:reply_tweet' tweet_info.tweet.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="text" name="reply_text"/>
+                                <button type="submit" class="btn btn-info"> Reply </button>
+                            </form>
+                        </li>
                     </div>
                     <br>
                 {% endfor %}

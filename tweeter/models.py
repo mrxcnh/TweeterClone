@@ -1,7 +1,18 @@
 from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
+
+
+class UserProfile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
+    bio = models.CharField(max_length=500)
+    display_name = models.CharField(max_length=500)
+    location = models.CharField(max_length=500)
+    website = models.URLField()
+    # profile_photo = models.ImageField()
+    # header_photo = models.ImageField()
 
 
 class Tweet(models.Model):
