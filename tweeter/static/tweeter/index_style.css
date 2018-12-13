@@ -1,59 +1,19 @@
+#nav li a:hover:not(.active) {
+    background-color: #CCFF;
+}
 
-        .split {
-            height: 100%;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
-
-        /* Control the left side */
-        .left {
-            left: 0;
-            width: 70%;
-
-        }
-
-        /* Control the right side */
-        .right {
-            right: 0;
-            width: 30%;
-
-        }
-
-        #nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: gray;
-        }
-        #nav li {
-            float: left;
-        }
-
-        #nav li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-             text-decoration: none;
-        }
-
-        #nav li a:hover:not(.active) {
-            background-color: #CCFF;
-        }
-
-        #nav .active {
-            background-color: #44FF;
-        }
-        .username{
-            font-size: 20px;
-        }
-        .tweet_text_field{
-            border-color: black;
-        }
-        .action_with_tweet_li {
-            display: inline-block;
-        }
+#nav .active {
+    background-color: #44FF;
+}
+.username{
+    font-size: 20px;
+}
+.tweet_field{
+    float: right;
+}
+.action_with_tweet_li {
+    display: inline-block;
+}
+.reply_text{
+    background-color: green;
+}

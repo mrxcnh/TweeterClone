@@ -7,6 +7,26 @@
     <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_1.bundle.css">
     <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_2.bundle.css">
 {% endblock %}
+{% block javascript %}
+    <script>
+    $("#id_username").blur(function () {
+        let username = $(this).val();
+
+        $.ajax({
+            url: '{% url "accounts:validate_username" %}',
+            data: {
+                'username': username
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.is_taken){
+                    alert("A user with this username already exist!");
+                }
+            }
+        });
+    });
+  </script>
+{% endblock %}
 {% block content %}
     <div class="page-canvas">
     <a href="{% url 'login' %}">Back to login</a>

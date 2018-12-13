@@ -1,59 +1,95 @@
 
 {% include 'header.html' %}
 {% block style %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_core.bundle.css" class="coreCSSBundles">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_1.bundle.css">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_2.bundle.css">
 {% endblock %}
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'tweeter/index_style.css' %}">
 {% if user.is_authenticated %}
-{% block nav %}
-    <div id="nav">
-        <ul>
-            <li><a href="{% url 'tweeter:index' %}" class="active">Home</a></li>
-            <li><a href="{% url 'tweeter:people' %}"> People </a></li>
-        </ul>
-    </div>
-{% endblock %}
-    <div id="tweet">
-        <h3>What's in your mind?</h3>
-        <form action="{% url 'tweeter:add_tweet' %}" method="post" name="frm">
-            {% csrf_token %}
-            <input type="text" name="tweet_text" class="tweet_text_field">
-            <button type="submit" class="btn btn-primary"> Tweet </button>
-        </form>
-    </div>
-        <div id="tweet_list">
-            <h3> Tweet list you may care </h3>
-            {% if tweet_info_list %}
-                <ul>
-                {% for tweet_info in tweet_info_list %}
-                    <li><span class="username"><strong>{{ tweet_info.tweet.user.username }}</strong></span> tweeted on {{ tweet_info.tweet.time_tweeted}}: {{ tweet_info.tweet.tweet_text }}</li>
-                    <br>
-                    <div id="reply_div">
-                        {%  for reply in tweet_info.reply %}
-                            <p> {{ reply.user.username }} on {{ reply.time_reply }}: {{  reply.reply_text }} </p>
-                        {% endfor %}
+    {% block nav %}
+        <div class="topbar js-topbar">
+            <div class="global-nav global-nav--newLoggedOut" data-section-term="top_nav">
+                <div class="global-nav-inner">
+                    <div class="container" id="nav">
+                        <ul class="nav js-global-actions" id="global-actions">
+                            <li id="global-nav-home" class="home active" data-global-action="home">
+                                <a class="js-nav js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'tweeter:index' %}" data-component-context="home_nav" data-nav="home">
+                                    <span class="text" aria-hidden="true">Home</span>
+                                    <span class="u-hiddenVisually a11y-inactive-page-text">Home</span>
+                                    <span class="u-hiddenVisually a11y-active-page-text">Home, current page.</span>
+                                </a>
+                            </li>
+                            <li id="global-nav-about" class="about" data-global-action="about">
+                                <a class="js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'tweeter:people' %}" data-component-context="about_nav" data-nav="about">
+                                    <span class="text">People</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="pull-right nav-extras">
+                            <p style="font-size: 20px; margin: 20px"> Hi <a href="{% url 'tweeter:user_profile' user.id %}">{{ user.username }}</a></p>
+                            <a href="{% url 'logout' %}" class="js-nav js-tooltip js-dynamic-tooltip">
+                                <span class="js-current-language">Logout</span>
+                            </a>
+                        </div>
                     </div>
-                    <div id="action_with_tweet">
-                        <li style="display: inline-block"><a href="#">{{ tweet_info.number_tweet_likes }}</a></li>
-                        {% if tweet_info.is_liked %}
-                            <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet" tweet_info.tweet.id %}'" class="btn btn-primary">Unlike</button></li>
-                        {% else %}
-                            <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet" tweet_info.tweet.id %}'" class="btn btn-primary">Like</button></li>
-                        {% endif %}
-                        <li style="display: inline-block; margin-left: 10px">
-                            <form action="{% url 'tweeter:reply_tweet' tweet_info.tweet.id %}" method="post">
-                                {% csrf_token %}
-                                <input type="text" name="reply_text"/>
-                                <button type="submit" class="btn btn-info"> Reply </button>
-                            </form>
-                        </li>
-                    </div>
-                    <br>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>Don't have a tweet yet!</p>
-            {% endif %}
+                </div>
+            </div>
         </div>
+    {% endblock %}
+    {% block content %}
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'tweeter/index_style.css' %}">
+        <br><br><br>
+        <div class="page-canvas">
+            <div id="tweet">
+                <form action="{% url 'tweeter:add_tweet' %}" method="post" name="frm">
+                    {% csrf_token %}
+                    <h3><label for="{{ tweet_form.tweet_text.id_for_label }}"> What are you thinking: </label></h3>
+                    <div class="tweet-box rich-editor is-showPlaceholder">
+                        {{ tweet_form.tweet_text }}
+                        <button type="submit" class="submit EdgeButton EdgeButton--primary EdgeButtom--medium"> Tweet </button>
+                    </div>
+                </form>
+            </div>
+            <div id="tweet_list">
+                <h3> Tweet list you may care </h3>
+                <br><br>
+                {% if tweet_info_list %}
+                    <ul>
+                    {% for tweet_info in tweet_info_list %}
+                        <div>
+                        <li><span class="username"><strong><a href="{% url 'tweeter:user_profile' tweet_info.tweet.user.id %}">{{ tweet_info.tweet.user.username }}</a></strong></span> tweeted on {{ tweet_info.tweet.time_tweeted}}: {{ tweet_info.tweet.tweet_text }}</li>
+                        <br>
+                        <hr/>
+                        <div id="reply_div">
+                            {%  for reply in tweet_info.reply %}
+                                <p style="margin-left: 40px;"> <span style="margin-right:20px;"><a href="{% url 'tweeter:user_profile' reply.user.id %}">{{ reply.user.username }}</a></span> on {{ reply.time_reply }}: <span style="margin-left: 20px">{{  reply.reply_text }}</span> </p><br>
+                            {% endfor %}
+                        </div>
+                        <div id="action_with_tweet">
+                            <li style="display: inline-block; margin-left: 40px;"><a href="#">{{ tweet_info.number_tweet_likes }}</a></li>
+                            {% if tweet_info.is_liked %}
+                                <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet" tweet_info.tweet.id %}'" class="btn btn-primary">Unlike</button></li>
+                            {% else %}
+                                <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet" tweet_info.tweet.id %}'" class="btn btn-primary">Like</button></li>
+                            {% endif %}
+                            <li style="display: inline-block; margin-left: 40px;">
+                                <form action="{% url 'tweeter:reply_tweet' tweet_info.tweet.id %}" method="post">
+                                    {% csrf_token %}
+                                    {{ reply_form.reply }}
+                                    <button type="submit" class="btn btn-info"> Reply </button>
+                                </form>
+                            </li>
+                        </div>
+
+                        <br>
+                        </div>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Don't have a tweet yet!</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}
 {% endif %}

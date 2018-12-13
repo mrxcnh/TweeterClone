@@ -1,0 +1,188 @@
+
+{% include 'header.html' %}
+{% block style %}
+    <link rel="stylesheet" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_core.bundle.css" class="coreCSSBundles">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_1.bundle.css">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_2.bundle.css">
+{% endblock %}
+{% if user.is_authenticated %}
+    {% block nav %}
+        <div class="topbar js-topbar">
+            <div class="global-nav global-nav--newLoggedOut" data-section-term="top_nav">
+                <div class="global-nav-inner">
+                    <div class="container" id="nav">
+                        <ul class="nav js-global-actions" id="global-actions">
+                            <li id="global-nav-home" class="home" data-global-action="home">
+                                <a class="js-nav js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'tweeter:index' %}" data-component-context="home_nav" data-nav="home">
+                                    <span class="text" aria-hidden="true">Home</span>
+                                    <span class="u-hiddenVisually a11y-inactive-page-text">Home</span>
+                                    <span class="u-hiddenVisually a11y-active-page-text">Home, current page.</span>
+                                </a>
+                            </li>
+                            <li id="global-nav-about" class="about" data-global-action="about">
+                                <a class="js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'tweeter:people' %}"data-component-context="about_nav" data-nav="about">
+                                    <span class="text">People</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="pull-right nav-extras">
+                            <p style="font-size: 20px; margin: 20px"> Hi <a href="{% url 'tweeter:user_profile' user.id %}">{{ user.username }}</a></p>
+                            <a href="{% url 'logout' %}" class="js-nav js-tooltip js-dynamic-tooltip">
+                                <span class="js-current-language">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    {% block content %}
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'tweeter/index_style.css' %}">
+        <br><br><br>
+
+        <div class="ProfileCanopy ProfileCanopy--withNav ProfileCanopy--large js-variableHeightTopBar">
+            <div class="ProfileCanopy-inner">
+                <div class="ProfileCanopy-header u-bgUserColor" style="margin-top: 0px;">
+                    <div class="ProfileCanopy-headerBg">
+                        <img alt="" src="#" style="transform: none;" />
+                    </div>
+                    <div class="AppContainer">
+                        <div class="ProfileCanopy-avatar">
+                            <div class="ProfileAvatar">
+                                <a class="ProfileAvatar-container u-block js-tooltip profile-picture" href="#" title="DigitalOcean" data-resolved-url-large="#" data-url="#" target="_blank" rel="noopener"><img class="ProfileAvatar-image" src="#" alt="DigitalOcean" /></a>
+                            </div>
+                        </div>
+                        <div class="ProfileCanopy-headerPromptAnchor"></div>
+                    </div>
+                </div>
+                <div class="ProfileCanopy-navBar u-boxShadow">
+                    <div class="AppContainer">
+                        <div class="Grid Grid--withGutter">
+                            <div class="Grid-cell u-size1of3 u-lg-size1of4">
+                                <div class="ProfileCanopy-card" role="presentation" aria-hidden="true">
+                                    <div class="ProfileCardMini">
+                                        <a class="ProfileCardMini-avatar profile-picture js-tooltip" href="#" title="#" data-resolved-url-large="#" data-url="#" target="_blank" rel="noopener" tabindex="-1">
+                                            <img class="ProfileCardMini-avatarImage" alt="DigitalOcean" src="#" /></a>
+                                        <div class="ProfileCardMini-details">
+                                            <div class="ProfileNameTruncated account-group">
+                                                <div class="u-textTruncate u-inlineBlock ProfileNameTruncated-withBadges ProfileNameTruncated-withBadges--1">
+                                                    <a class="fullname ProfileNameTruncated-link u-textInheritColor js-nav" href="/digitalocean" data-aria-label-part="" tabindex="-1">DigitalOcean</a>
+                                                </div><span class="UserBadges"><span class="Icon Icon--verified"><span class="u-hiddenVisually">Verifiedaccount</span></span></span>
+                                            </div>
+                                            <div class="ProfileCardMini-screenname">
+                                                <a href="/digitalocean" class="ProfileCardMini-screennameLink u-linkComplex js-nav u-dir" dir="ltr" tabindex="-1"><span class="username u-dir" dir="ltr">@<strong class="u-linkComplex-target">digitalocean</strong></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="Grid-cell u-size2of3 u-lg-size3of4">
+                            <div class="ProfileCanopy-nav">
+                                <div class="ProfileNav" role="navigation">
+                                <ul class="ProfileNav-list">
+                                    <li class="ProfileNav-item ProfileNav-item--tweets is-active">
+                                        <a class="ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-nav">
+                                            <span class="ProfileNav-label" aria-hidden="true">Tweets</span>
+                                            <span class="u-hiddenVisually">Tweets, current page.</span>
+                                            <span class="ProfileNav-value" data-is-compact="true"> {{ user_info.tweet_count }} </span></a>
+                                    </li>
+                                    <li class="ProfileNav-item ProfileNav-item--following">
+                                        <a class="ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-nav u-textUserColor" data-nav="following" href="#">
+                                            <span class="ProfileNav-label" aria-hidden="true">Following</span>
+                                            <span class="u-hiddenVisually">Following</span>
+                                            <span class="ProfileNav-value" data-is-compact="false"> {{ user_info.following_count }} </span></a>
+                                    </li>
+                                    <li class="ProfileNav-item ProfileNav-item--followers">
+                                        <a class="ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-nav u-textUserColor" data-nav="followers" href="#">
+                                            <span class="ProfileNav-label" aria-hidden="true">Followers</span>
+                                            <span class="u-hiddenVisually">Followers</span>
+                                            <span class="ProfileNav-value"data-is-compact="true"> {{ user_info.follower_count }} </span></a>
+                                    </li>
+                                    <li class="ProfileNav-item ProfileNav-item--favorites" data-more-item=".ProfileNav-dropdownItem--favorites">
+                                        <a class="ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-nav u-textUserColor"  data-nav="favorites" href="#">
+                                            <span class="ProfileNav-label" aria-hidden="true">Likes</span>
+                                            <span class="u-hiddenVisually">Likes</span>
+                                            <span class="ProfileNav-value" data-is-compact="true"> {{ user_info.like_count }} </span></a>
+                                    </li>
+
+                                    <li class="ProfileNav-item ProfileNav-item--userActions u-floatRight u-textRight with-rightCaret">
+                                        <div class="UserActions u-textLeft" data-impression-id="108fbd369faa21b2">
+                                            <div class="user-actions btn-group not-following not-muting can-dm" data-protected="false">
+                                                <span class="user-actions-follow-button js-follow-btn follow-button">
+                                                    <button type="button" class=" EdgeButton EdgeButton--secondary EdgeButton--medium button-text follow-text" onclick=location.href='#'>
+                                                        <span class="user-actions-follow-button js-follow-btn follow-button">
+                                                            <span class="user-actions-follow-button js-follow-btn follow-button">
+                                                                <span aria-hidden="true">Follow</span>
+                                                                    <span class="u-hiddenVisually">Follow<span class="username u-dir u-textTruncate" dir="ltr">@<strong>digitalocean</strong></span></span></span>
+                                                        </span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Grid Grid--withGutter">
+            <div class="Grid-cell u-size1of3 u-lg-size1of4">
+            <br><br>
+            <form method="post" action="{% url 'tweeter:edit_user_profile' user.id %}" style="margin-left:20px;">
+                {% csrf_token %}
+                {% for field in profile_form %}
+                    <p>{{ field.label_tag }}</p>
+                    <p>{{ field }}</p><br>
+                {% endfor %}
+                {% if user.id == user_info.id %}
+                <button type="submit" class="btn btn-info"> Edit </button>
+                {% endif %}
+            </form>
+            </div>
+            <div class="Grid-cell u-size2of3 u-lg-size3of4">
+                <div id="tweet_list">
+                    <br><br>
+                    <h3> Tweets & Replies </h3>
+                    <br><br>
+                    {% if tweet_info_list %}
+
+                        <ul>
+                        {% for tweet_info in tweet_info_list %}
+                            <li><span class="username"><strong><a href="#">{{ tweet_info.tweet.user.username }}</a></strong></span> tweeted on {{ tweet_info.tweet.time_tweeted}}: {{ tweet_info.tweet.tweet_text }}</li>
+                            <br>
+                            <div id="reply_div">
+                                {%  for reply in tweet_info.reply %}
+                                    <p style="margin-left: 40px;"> <span style="margin-right:20px;"><a href="#">{{ reply.user.username }}</a></span> on {{ reply.time_reply }}: <span style="margin-left: 20px">{{  reply.reply_text }}</span> </p><br>
+                                {% endfor %}
+                            </div>
+                            <div id="action_with_tweet">
+                                <li style="display: inline-block; margin-left: 40px;"><a href="#">{{ tweet_info.number_tweet_likes }}</a></li>
+                                {% if tweet_info.is_liked %}
+                                    <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet1" tweet_info.tweet.id %}'" class="btn btn-primary">Unlike</button></li>
+                                {% else %}
+                                    <li style="display: inline-block; margin-left: 10px"><button onclick="location.href='{% url "tweeter:like_tweet1" tweet_info.tweet.id %}'" class="btn btn-primary">Like</button></li>
+                                {% endif %}
+                                <li style="display: inline-block; margin-left: 40px;">
+                                    <form action="{% url 'tweeter:reply_tweet1' tweet_info.tweet.id %}" method="post">
+                                        {% csrf_token %}
+                                        {{ reply_form.reply }}
+                                        <button type="submit" class="btn btn-info"> Reply </button>
+                                    </form>
+                                </li>
+                            </div>
+                            <br>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>Don't have a tweet yet!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endif %}

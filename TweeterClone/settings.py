@@ -129,3 +129,4 @@ LOGIN_REDIRECT_URL = 'tweeter:index'
 LOGOUT_REDIRECT_URL = 'tweeter:index'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FILEPATH = os.path.join(BASE_DIR, "sent_emails")
+PASSWORD_RESET_TIMEOUT_DAYS = 1

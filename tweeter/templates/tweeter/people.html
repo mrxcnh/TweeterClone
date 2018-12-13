@@ -1,41 +1,70 @@
 
 {% include 'header.html' %}
 {% block style %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_core.bundle.css" class="coreCSSBundles">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_1.bundle.css">
+    <link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1543893215/css/t1/twitter_more_2.bundle.css">
 {% endblock %}
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'tweeter/people_style.css' %}">
 {% if user.is_authenticated %}
-{% block nav %}
-    <div id="nav">
-        <ul>
-            <li><a href="{% url 'tweeter:index' %}" >Home</a></li>
-            <li><a href="{% url 'tweeter:people' %}" class="active"> People </a></li>
-    </ul>
-    </div>
-{% endblock %}
-
-        <div id="people_list">
-            <h3> People you may want to follow </h3>
-            {% if user_with_follow_info_list %}
-                <ul>
-                {% for user_with_follow_info in user_with_follow_info_list %}
-                    <li style="display: inline-block; margin-left: 20px;"><span style="font-size: 20px;"><strong>{{ user_with_follow_info.user_to_display.username }}</strong></span> </li>
-                    {{ user_with_follow_info.number_of_following }} following{{ user_with_follow_info.number_of_following|pluralize  }}
-                    {{ user_with_follow_info.number_of_follower }} follower{{ user_with_follow_info.number_of_follower|pluralize }}
-                    {% if user_with_follow_info.user_to_display.username !=  user.username %}
-                    {% if user_with_follow_info.is_followed %}
-                        <li style="display: inline-block; margin-left: 20px;"> <button onclick="location.href='{% url "tweeter:follow_user" user_with_follow_info.user_to_display.id %}'" class="btn btn-primary">Unfollow</button>
-                    {% else %}
-                        <li style="display: inline-block; margin-left: 20px;"> <button onclick="location.href='{% url "tweeter:follow_user" user_with_follow_info.user_to_display.id %}'" class="btn btn-primary">Follow</button>
-                    {% endif %}
-                    {% endif %}
-                    </li>
-                    <br>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>Don't have a tweet yet!</p>
-            {% endif %}
+    {% block nav %}
+        <div class="topbar js-topbar">
+            <div class="global-nav global-nav--newLoggedOut" data-section-term="top_nav">
+                <div class="global-nav-inner">
+                    <div class="container" id="nav">
+                        <ul class="nav js-global-actions" id="global-actions">
+                            <li id="global-nav-home" class="home" data-global-action="home">
+                                <a class="js-nav js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'tweeter:index' %}" data-component-context="home_nav" data-nav="home">
+                                    <span class="text" aria-hidden="true">Home</span>
+                                    <span class="u-hiddenVisually a11y-inactive-page-text">Home</span>
+                                    <span class="u-hiddenVisually a11y-active-page-text">Home, current page.</span>
+                                </a>
+                            </li>
+                            <li id="global-nav-about" class="about active" data-global-action="about">
+                                <a class="js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'tweeter:people' %}"data-component-context="about_nav" data-nav="about">
+                                    <span class="text">People</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="pull-right nav-extras">
+                            <p style="font-size: 20px; margin: 20px"> Hi <a href="{% url 'tweeter:user_profile' user.id %}">{{ user.username }}</a></p>
+                            <a href="{% url 'logout' %}" class="js-nav js-tooltip js-dynamic-tooltip">
+                                <span class="js-current-language">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    {% endblock %}
+    {% block content %}
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'tweeter/index_style.css' %}">
+        <br><br><br>
+        <div class="page-canvas">
+            <div id="people_list">
+                <h3> People you may want to follow </h3>
+                {% if user_with_follow_info_list %}
+                    <ul>
+                    {% for user_with_follow_info in user_with_follow_info_list %}
+                        <li style="display: inline-block; margin: 20px;"><a href="{% url 'tweeter:user_profile' user_with_follow_info.user_to_display.id %}"><span style="font-size: 20px;"><strong>{{ user_with_follow_info.user_to_display.username }}</strong></span></a> </li>
+                        <span style="margin: 20px;">{{ user_with_follow_info.number_of_following }} following{{ user_with_follow_info.number_of_following|pluralize }}</span>
+                        <span style="margin: 20px;"> {{ user_with_follow_info.number_of_follower }} follower{{ user_with_follow_info.number_of_follower|pluralize }} </span>
+                        <span style="margin: 20px;">
+                        {% if user_with_follow_info.user_to_display.username !=  user.username %}
+                            {% if user_with_follow_info.is_followed %}
+                                <li style="display: inline-block; margin-left: 20px;"> <button onclick="location.href='{% url "tweeter:follow_user" user_with_follow_info.user_to_display.id %}'" class="btn btn-primary">Unfollow</button></li>
+                            {% else %}
+                                <li style="display: inline-block; margin-left: 20px;"> <button onclick="location.href='{% url "tweeter:follow_user" user_with_follow_info.user_to_display.id %}'" class="btn btn-primary">Follow</button></li>
+                            {% endif %}
+                        {% endif %}
+                        </span>
+                        <br>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Don't have a tweet yet!</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}
 {% endif %}

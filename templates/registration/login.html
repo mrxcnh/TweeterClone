@@ -13,7 +13,7 @@
     <div class="global-nav global-nav--newLoggedOut" data-section-term="top_nav">
         <div class="global-nav-inner">
             <div class="container">
-                <ul class="nav js-global-actions" role="navigation" id="global-actions">
+                <ul class="nav js-global-actions" id="global-actions">
                   <li id="global-nav-home" class="home" data-global-action="home">
                     <a class="js-nav js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'tweeter:index' %}" data-component-context="home_nav" data-nav="home">
                       <span class="Icon Icon--bird Icon--large"></span>
@@ -37,7 +37,14 @@
     {% csrf_token %}
     <h3><strong>Login to tweeter clone</strong></h3>
     <br><br>
-    {{ form.as_p }}
+    <div class="fieldWrapper">
+    {% for field in form %}
+        <div class="clearfix field"><span id="fieldName">{{ field.label_tag }}</span>   <span id="inputField" class="js-username-field email-input js-initial-focus">{{ field }}</span>
+            {{ field.errors }}
+            <br><br>
+        </div>
+    {% endfor %}
+    </div>
     <br>
     <div class="clearfix">
         <button type="submit" class="submit EdgeButton EdgeButton--primary EdgeButtom--medium">Login</button>

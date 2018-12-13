@@ -1,3 +1,4 @@
+{% load static %}
 <html lang="en" data-scribe-reduced-action-queue="true">
     <head>
     <title> {% block title %} Title {% endblock %}</title>
@@ -13,9 +14,12 @@
             {% endblock %}
         </nav>
         </header>
-    <div>
+        <div>
             {% block content %}
             {% endblock %}
         </div>
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+        <script src="{% static 'js/app.js' %}"></script>
+        {% block javascript %}{% endblock %}
     </body>
 </html>
